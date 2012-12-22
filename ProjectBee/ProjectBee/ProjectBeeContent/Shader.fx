@@ -1,58 +1,49 @@
 // XNA 4.0 Shader Programming #1 - Ambient light
 
-// Matrix
-float4x4 World;
-float4x4 View;
-float4x4 Projection;
+	float4x4 World;
+	float4x4 View;
+	float4x4 Projection;
 
-// Light related
-float4 AmbientColor;
-float AmbientIntensity;
-float3 LightDir;
+	float AmbientIntensity;
+	float4 AmbientColor;
+	float3 LightDir;
 
-// The input for the VertexShader
-struct VertexShaderInput
-{
-    float4 Position : POSITION0;
-};
+	struct VS_INPUT
+	{
+		float4 Position : POSITION;
+		float4 Normal : NORMAL;
+	};
 
-// The output from the vertex shader, used for later processing
-struct VertexShaderOutput
-{
-    float4 Position : POSITION0;
-};
+	struct VS_OUTPUT
+	{
+		float4 Position : POSITION;
+		float4 camSpacePos : TEXCOORD1;
+		float4 camSpaceNormal : TEXCOORD2;
+	};
 
-// The VertexShader.
-VertexShaderOutput VertexShaderFunction(VertexShaderInput input)
-{
-    VertexShaderOutput output;
+	VS_OUTPUT BasicVS(VS_INPUT input)
+	{
+		VS_OUTPUT output;
 
-    float4 worldPosition = mul(input.Position, World);
-    float4 viewPosition = mul(worldPosition, View);
-    output.Position = mul(viewPosition, Projection);
+		float4x4 mvp = mul( mul(World, View), Projection);
+		float4 projPosition = mul(input.Position, mvp);
+		output.Position = projPosition;
+		output.camSpacePos = projPosition;
+		output.camSpaceNormal = mul(input.Normal, mvp);
 
-    return output;
-}
+		return output;
+	}
 
-// The Pixel Shader
-float4 PixelShaderFunction(VertexShaderOutput input) : COLOR0
-{
-    return AmbientColor*AmbientIntensity;
-}
+	float4 BasicPS(VS_OUTPUT input) : COLOR0
+	{
+		return AmbientIntensity * AmbientColor;
+	}
 
-float4 GaussianLighting(VertexShaderOutput input) : COLOR0
-{
-	float cosAngIncidence = dot(input.Position, LightDir);
-	cosAngIncidence = clamp(cosAngIncidence, 0, 1);
-	return AmbientColor * cosAngIncidence;
-}
-
-// Our Techinique
-technique Technique1
-{
-    pass Pass1
-    {
-        VertexShader = compile vs_2_0 VertexShaderFunction();
-        PixelShader = compile ps_2_0 PixelShaderFunction();
-    }
-}
+	technique Technique1
+	{
+		pass Pass1
+		{
+			VertexShader = compile vs_3_0 BasicVS();
+			PixelShader = compile ps_3_0 BasicPS();
+		}
+	}

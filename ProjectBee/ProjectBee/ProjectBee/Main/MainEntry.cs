@@ -84,10 +84,8 @@ namespace ProjectBee.Main
 
             cube = CreateCube();
 
-            // Load the shader
             shader = Content.Load<Effect>("Shader");
 
-            // Set up the parameters
             SetupShaderParameters();
 
             // calculate matrixes
