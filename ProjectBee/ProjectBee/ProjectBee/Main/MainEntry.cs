@@ -20,6 +20,8 @@ namespace ProjectBee.Main
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        RasterizerState state;
+
         GameObject cube;
 
         // The object that will contain our shader
@@ -36,6 +38,7 @@ namespace ProjectBee.Main
         Matrix world, view, projection;
         float ambientLightIntensity;
         Vector4 ambientLightColor;
+        Vector3 ambientLightDirVal;
 
         double rotateCamera = 0.0f;
 
@@ -88,9 +91,17 @@ namespace ProjectBee.Main
 
             SetupShaderParameters();
 
-            // calculate matrixes
+            state = new RasterizerState();
+            state.CullMode = CullMode.CullClockwiseFace;
+            state.FillMode = FillMode.Solid;
+
+            GraphicsDevice.RasterizerState = state;
+
+
+            // calculate projection matrix
             float aspectRatio = (float)graphics.GraphicsDevice.Viewport.Width / (float)graphics.GraphicsDevice.Viewport.Height;
-            float fov = MathHelper.PiOver4 * aspectRatio * 3 / 4;
+            // fov = 90 deg = PI/2 rad
+            float fov = MathHelper.PiOver2;
             projection = Matrix.CreatePerspectiveFieldOfView(fov, aspectRatio, 0.1f, 1000.0f);
 
             //create a default world matrix
@@ -126,11 +137,16 @@ namespace ProjectBee.Main
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            // ambient light stuff
             ambientLightIntensity = 1.0f;
             ambientLightColor = Color.DarkGreen.ToVector4();
+            ambientLightDirVal = new Vector3(1, 0.9f, 0.5f);
 
-            rotateCamera += gameTime.ElapsedGameTime.Milliseconds / 1000.0;
-            view = Matrix.CreateLookAt(new Vector3(20.0f * (float)Math.Cos(rotateCamera), 2, 20.0f * (float)Math.Sin(rotateCamera)), new Vector3(0, 0, 0), Vector3.Up);
+            // rotate the cam around the center
+            rotateCamera += (gameTime.ElapsedGameTime.Milliseconds / 10000.0) * MathHelper.Pi*2;
+            float dist = 5.0f;
+            Vector3 camPos = new Vector3(dist * (float)Math.Cos(rotateCamera), dist * (float)Math.Sin(rotateCamera), 2);
+            view = Matrix.CreateLookAt(camPos, new Vector3(0), new Vector3(0,0,1));
 
             base.Update(gameTime);
         }
@@ -141,7 +157,7 @@ namespace ProjectBee.Main
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.Black);
+            GraphicsDevice.Clear(Color.AntiqueWhite);
 
             ModelMesh mesh = cube.Mesh.Meshes[0];
             ModelMeshPart meshPart = mesh.MeshParts[0];
@@ -152,7 +168,7 @@ namespace ProjectBee.Main
             worldParameter.SetValue(world);
             ambientIntensityParameter.SetValue(ambientLightIntensity);
             ambientColorParameter.SetValue(ambientLightColor);
-            lightDir.SetValue(new Vector3(1,0,0));
+            lightDir.SetValue(ambientLightDirVal);
 
 
             //set the vertex source to the mesh's vertex buffer

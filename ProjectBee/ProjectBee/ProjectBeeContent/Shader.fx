@@ -17,26 +17,33 @@
 	struct VS_OUTPUT
 	{
 		float4 Position : POSITION;
-		float4 camSpacePos : TEXCOORD1;
-		float4 camSpaceNormal : TEXCOORD2;
+		float4 CamSpacePos : TEXCOORD1;
+		float CosAngIncidence : TEXCOORD2;
 	};
 
 	VS_OUTPUT BasicVS(VS_INPUT input)
 	{
 		VS_OUTPUT output;
 
-		float4x4 mvp = mul( mul(World, View), Projection);
-		float4 projPosition = mul(input.Position, mvp);
-		output.Position = projPosition;
-		output.camSpacePos = projPosition;
-		output.camSpaceNormal = mul(input.Normal, mvp);
+		float4x4 mvp = mul( mul(View, World), Projection);
+		float4 pos = mul(input.Position, World);
+		pos = mul(pos, View);
+		pos = mul(pos, Projection);
+		output.Position = pos;
+		output.CamSpacePos = pos;
+
+		float4 normal = mul(input.Normal, World);
+
+		float cosAngIncidence = dot(normal, LightDir);
+		output.CosAngIncidence = clamp(cosAngIncidence, 0, 1);
 
 		return output;
 	}
 
 	float4 BasicPS(VS_OUTPUT input) : COLOR0
 	{
-		return AmbientIntensity * AmbientColor;
+		
+		return AmbientIntensity * AmbientColor * input.CosAngIncidence;
 	}
 
 	technique Technique1
