@@ -22,7 +22,7 @@ namespace ProjectBee.Main
 
         RasterizerState state;
 
-        GameObject cube;
+        GameObject drawnObject;
 
         // The object that will contain our shader
         Effect shader;
@@ -85,7 +85,7 @@ namespace ProjectBee.Main
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            cube = CreateCube();
+            drawnObject = CreateCube();
 
             shader = Content.Load<Effect>("Shader");
 
@@ -137,6 +137,14 @@ namespace ProjectBee.Main
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
                 this.Exit();
 
+            if(Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D1))
+                drawnObject.Mesh = Content.Load<Model>("cube");
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D2))
+                drawnObject.Mesh = Content.Load<Model>("cylinder");
+            if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D3))
+                drawnObject.Mesh = Content.Load<Model>("sphere");
+
+
             // ambient light stuff
             ambientLightIntensity = 1.0f;
             ambientLightColor = Color.DarkGreen.ToVector4();
@@ -159,7 +167,7 @@ namespace ProjectBee.Main
         {
             GraphicsDevice.Clear(Color.AntiqueWhite);
 
-            ModelMesh mesh = cube.Mesh.Meshes[0];
+            ModelMesh mesh = drawnObject.Mesh.Meshes[0];
             ModelMeshPart meshPart = mesh.MeshParts[0];
 
             // Set parameters

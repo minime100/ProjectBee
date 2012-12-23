@@ -42,8 +42,12 @@
 
 	float4 BasicPS(VS_OUTPUT input) : COLOR0
 	{
-		
 		return AmbientIntensity * AmbientColor * input.CosAngIncidence;
+	}
+
+	float4 GaussLighting(VS_OUTPUT input) : COLOR0
+	{
+
 	}
 
 	technique Technique1
