@@ -88,10 +88,10 @@ namespace ProjectBee.Main
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             drawnObject = CreateCube();
-            drawnObject.PositionInWorld = new Vector3(2, 2, 2);
+            drawnObject.PositionInWorld = new Vector3(0, 0, 0);
             drawnObject.RotationAxis = new Vector3(1, 1, 1);
-            drawnObject.RotationAngleInDegrees = 45;
-            drawnObject.ScalingInWorld = 0.5f;
+            drawnObject.RotationAngleInDegrees = 90;
+            drawnObject.ScalingInWorld = 1.0f;
 
             shader = Content.Load<Effect>("Shader");
 
