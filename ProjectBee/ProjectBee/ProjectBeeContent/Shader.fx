@@ -32,7 +32,9 @@
 		output.Position = pos;
 		output.CamSpacePos = pos;
 
-		float4 normal = mul(input.Normal, World);
+		float4x4 worldWithoutTranslation = World;
+		worldWithoutTranslation[3,3] = 0;
+		float4 normal = normalize(mul(input.Normal, worldWithoutTranslation));
 
 		float cosAngIncidence = dot(normal, LightDir);
 		output.CosAngIncidence = clamp(cosAngIncidence, 0, 1);

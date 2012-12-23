@@ -24,6 +24,8 @@ namespace ProjectBee.Main
 
         GameObject drawnObject;
 
+        Transformations.BasicTransformation transform = new Transformations.BasicTransformation();
+
         // The object that will contain our shader
         Effect shader;
 
@@ -86,6 +88,10 @@ namespace ProjectBee.Main
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             drawnObject = CreateCube();
+            drawnObject.PositionInWorld = new Vector3(2, 2, 2);
+            drawnObject.RotationAxis = new Vector3(1, 1, 1);
+            drawnObject.RotationAngleInDegrees = 45;
+            drawnObject.ScalingInWorld = 0.5f;
 
             shader = Content.Load<Effect>("Shader");
 
@@ -104,16 +110,12 @@ namespace ProjectBee.Main
             float fov = MathHelper.PiOver2;
             projection = Matrix.CreatePerspectiveFieldOfView(fov, aspectRatio, 0.1f, 1000.0f);
 
-            //create a default world matrix
-            world = Matrix.Identity;
-
-            // TODO: use this.Content to load your game content here
         }
 
         private GameObject CreateCube()
         {
             GameObject cube = new GameObject();
-            cube.Mesh = Content.Load<Model>("cube");
+            cube.ObjectModel = Content.Load<Model>("cube");
             return cube;
         }
 
@@ -138,23 +140,23 @@ namespace ProjectBee.Main
                 this.Exit();
 
             if(Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D1))
-                drawnObject.Mesh = Content.Load<Model>("cube");
+                drawnObject.ObjectModel = Content.Load<Model>("cube");
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D2))
-                drawnObject.Mesh = Content.Load<Model>("cylinder");
+                drawnObject.ObjectModel = Content.Load<Model>("cylinder");
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D3))
-                drawnObject.Mesh = Content.Load<Model>("sphere");
+                drawnObject.ObjectModel = Content.Load<Model>("sphere");
 
 
             // ambient light stuff
             ambientLightIntensity = 1.0f;
             ambientLightColor = Color.DarkGreen.ToVector4();
-            ambientLightDirVal = new Vector3(1, 0.9f, 0.5f);
+            ambientLightDirVal = new Vector3(1.0f, 0.9f, 0.5f);
 
             // rotate the cam around the center
             rotateCamera += (gameTime.ElapsedGameTime.Milliseconds / 10000.0) * MathHelper.Pi*2;
             float dist = 5.0f;
-            Vector3 camPos = new Vector3(dist * (float)Math.Cos(rotateCamera), dist * (float)Math.Sin(rotateCamera), 2);
-            view = Matrix.CreateLookAt(camPos, new Vector3(0), new Vector3(0,0,1));
+            Vector3 camPos = new Vector3(dist * (float)Math.Cos(rotateCamera), dist * (float)Math.Sin(rotateCamera), 2.0f);
+            view = Matrix.CreateLookAt(camPos, new Vector3(0.0f), new Vector3(0.0f,0.0f,1.0f));
 
             base.Update(gameTime);
         }
@@ -167,7 +169,10 @@ namespace ProjectBee.Main
         {
             GraphicsDevice.Clear(Color.AntiqueWhite);
 
-            ModelMesh mesh = drawnObject.Mesh.Meshes[0];
+            transform.TransformGameObject(ref drawnObject);
+            world = drawnObject.World;
+
+            ModelMesh mesh = drawnObject.ObjectModel.Meshes[0];
             ModelMeshPart meshPart = mesh.MeshParts[0];
 
             // Set parameters
