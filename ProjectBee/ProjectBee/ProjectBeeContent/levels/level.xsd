@@ -1,0 +1,54 @@
+<?xml version="1.0" ?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <xsd:element name="level">
+    <xsd:complexType>
+      <xsd:sequence>
+        <xsd:element name="ambientLightColor" type="colorNoAlpha" />
+        <xsd:element name="ambientLightIntensity" type="betweenZeroAndOne" />
+        <xsd:element name="lightSource" type="lightSourceType" minOccurs="0" maxOccurs="unbounded" />
+        <xsd:element name="gameObject" type="gameObjectType" maxOccurs="unbounded" />
+      </xsd:sequence>
+    </xsd:complexType>
+  </xsd:element>
+  
+  <xsd:complexType name="lightSourceType">
+    <xsd:sequence>
+      <xsd:element name="color" type="colorNoAlpha"/>
+      <xsd:element name="lightIntensity" type="betweenZeroAndOne" />
+      <xsd:element name="position" type="vec3" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="gameObjectType">
+    <xsd:sequence>
+      <xsd:element name="model" type="xsd:string" />
+      <xsd:element name="position" type="vec3" />
+      <xsd:element name="scaling" type="xsd:float" />
+      <xsd:element name="rotationAxis" type="vec3" />
+      <xsd:element name="rotationAngle" type="xsd:float" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:simpleType name="betweenZeroAndOne">
+    <xsd:restriction base="xsd:float">
+      <xsd:minInclusive value="0" />
+      <xsd:maxInclusive value="1" />
+    </xsd:restriction>
+  </xsd:simpleType>
+    
+  <xsd:complexType name="colorNoAlpha">
+    <xsd:sequence>
+      <xsd:element name="red" type="betweenZeroAndOne" />
+      <xsd:element name="green" type="betweenZeroAndOne" />
+      <xsd:element name="blue" type="betweenZeroAndOne" />
+    </xsd:sequence>
+  </xsd:complexType>
+  
+  <xsd:complexType name="vec3">
+    <xsd:sequence>
+      <xsd:element name="x" type="xsd:float" />
+      <xsd:element name="y" type="xsd:float" />
+      <xsd:element name="z" type="xsd:float" />
+    </xsd:sequence>
+  </xsd:complexType>
+</xsd:schema>

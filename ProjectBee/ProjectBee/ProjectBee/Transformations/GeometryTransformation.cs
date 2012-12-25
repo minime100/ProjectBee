@@ -7,7 +7,7 @@ using Microsoft.Xna.Framework;
 
 namespace ProjectBee.Transformations
 {
-    class BasicTransformation
+    class GeometryTransformation
     {
         public void ScaleGameObject(ref GameObject toBeScaled) {
             float scale = toBeScaled.ScalingInWorld;

@@ -1,4 +1,6 @@
-Content\cube.xnb
-Content\cylinder.xnb
-Content\sphere.xnb
-Content\Shader.xnb
+Content\models\cube.xnb
+Content\models\cylinder.xnb
+Content\models\sphere.xnb
+Content\shader\basic.xnb
+Content\levels\level.xsd
+Content\levels\test.xml

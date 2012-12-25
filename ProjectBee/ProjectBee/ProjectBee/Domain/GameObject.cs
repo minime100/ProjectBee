@@ -13,6 +13,7 @@ namespace ProjectBee.Domain
     public class GameObject
     {
         public Model ObjectModel { get; set; }
+        public string ObjectModelContentName { get; set; }
         public Vector3 PositionInWorld { get; set; }
         public float ScalingInWorld { get; set; }
         public Vector3 RotationAxis { get; set; }

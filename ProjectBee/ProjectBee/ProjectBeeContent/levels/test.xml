@@ -1,0 +1,42 @@
+<?xml version="1.0" ?>
+<level xmlns:xsd="level.xsd">
+  <ambientLightColor>
+    <red>1.0</red>
+    <green>0.52</green>
+    <blue>0.12</blue>
+  </ambientLightColor>
+  <ambientLightIntensity>1</ambientLightIntensity>
+  
+  <!-- white colored light -->
+  <lightSource>
+    <color>
+      <red>1</red>
+      <green>1</green>
+      <blue>1</blue>
+    </color>
+    <lightIntensity>1</lightIntensity>
+    
+    <position>
+      <x>5</x>
+      <y>5</y>
+      <z>5</z>
+    </position>
+  </lightSource>
+  
+  <!-- testCube -->
+  <gameObject>
+    <model>models/cube</model>
+    <position>
+      <x>0</x>
+      <y>0</y>
+      <z>0</z>
+    </position>
+    <scaling>1.0</scaling>
+    <rotationAxis>
+      <x>0</x>
+      <y>0</y>
+      <z>0</z>
+    </rotationAxis>
+    <rotationAngle>0</rotationAngle>
+  </gameObject>
+</level>

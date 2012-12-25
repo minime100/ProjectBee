@@ -9,22 +9,26 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using ProjectBee.Domain;
+using ProjectBee.LevelParsing;
+using System.IO;
 
 namespace ProjectBee.Main
 {
     /// <summary>
     /// This is the main type for your game
     /// </summary>
-    public class MainEntry : Microsoft.Xna.Framework.Game
+    public class MainGame : Microsoft.Xna.Framework.Game
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
         RasterizerState state;
 
-        GameObject drawnObject;
+        LevelParser levelParser;
 
-        Transformations.BasicTransformation transform = new Transformations.BasicTransformation();
+        Level activeLevel;
+
+        Transformations.GeometryTransformation transform = new Transformations.GeometryTransformation();
 
         // The object that will contain our shader
         Effect shader;
@@ -44,10 +48,12 @@ namespace ProjectBee.Main
 
         double rotateCamera = 0.0f;
 
-        public MainEntry()
+        public MainGame()
         {
+            levelParser = new LevelParser();
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            activeLevel = levelParser.LoadLevel("test");
 
             graphics.PreferredBackBufferWidth = 800;
             graphics.PreferredBackBufferHeight = 600;
@@ -87,13 +93,12 @@ namespace ProjectBee.Main
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
-            drawnObject = CreateCube();
-            drawnObject.PositionInWorld = new Vector3(0, 0, 0);
-            drawnObject.RotationAxis = new Vector3(-1, -1, -1);
-            drawnObject.RotationAngleInDegrees = 45.0f;
-            drawnObject.ScalingInWorld = 1.0f;
+            foreach (GameObject gameObject in activeLevel.gameObjects)
+            {
+                gameObject.ObjectModel = Content.Load<Model>(gameObject.ObjectModelContentName);
+            }
 
-            shader = Content.Load<Effect>("Shader");
+            shader = Content.Load<Effect>("shader/basic");
 
             SetupShaderParameters();
 
@@ -110,13 +115,6 @@ namespace ProjectBee.Main
             float fov = MathHelper.PiOver2;
             projection = Matrix.CreatePerspectiveFieldOfView(fov, aspectRatio, 0.1f, 1000.0f);
 
-        }
-
-        private GameObject CreateCube()
-        {
-            GameObject cube = new GameObject();
-            cube.ObjectModel = Content.Load<Model>("cube");
-            return cube;
         }
 
         /// <summary>
@@ -140,11 +138,11 @@ namespace ProjectBee.Main
                 this.Exit();
 
             if(Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D1))
-                drawnObject.ObjectModel = Content.Load<Model>("cube");
+                activeLevel.gameObjects.ElementAt<GameObject>(0).ObjectModel = Content.Load<Model>("models/cube");
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D2))
-                drawnObject.ObjectModel = Content.Load<Model>("cylinder");
+                activeLevel.gameObjects.ElementAt<GameObject>(0).ObjectModel = Content.Load<Model>("models/cylinder");
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D3))
-                drawnObject.ObjectModel = Content.Load<Model>("sphere");
+                activeLevel.gameObjects.ElementAt<GameObject>(0).ObjectModel = Content.Load<Model>("models/sphere");
 
 
             // ambient light stuff
@@ -169,10 +167,11 @@ namespace ProjectBee.Main
         {
             GraphicsDevice.Clear(Color.AntiqueWhite);
 
-            transform.TransformGameObject(ref drawnObject);
-            world = drawnObject.World;
+            GameObject toDraw = activeLevel.gameObjects.ElementAt<GameObject>(0);
+            transform.TransformGameObject(ref toDraw);
+            world = toDraw.World;
 
-            ModelMesh mesh = drawnObject.ObjectModel.Meshes[0];
+            ModelMesh mesh = toDraw.ObjectModel.Meshes[0];
             ModelMeshPart meshPart = mesh.MeshParts[0];
 
             // Set parameters

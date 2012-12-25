@@ -10,7 +10,7 @@ namespace ProjectBee.Main
         /// </summary>
         static void Main(string[] args)
         {
-            using (MainEntry game = new MainEntry())
+            using (MainGame game = new MainGame())
             {
                 game.Run();
             }
