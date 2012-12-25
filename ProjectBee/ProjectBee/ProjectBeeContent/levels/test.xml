@@ -5,22 +5,38 @@
     <green>0.52</green>
     <blue>0.12</blue>
   </ambientLightColor>
-  <ambientLightIntensity>0.5</ambientLightIntensity>
+  <ambientLightIntensity>0.1</ambientLightIntensity>
   
   <!-- white colored light -->
   <lightSource>
     <color>
       <red>1</red>
-      <green>1</green>
-      <blue>1</blue>
+      <green>0.7</green>
+      <blue>0</blue>
     </color>
     <lightIntensity>1</lightIntensity>
     
     <position>
-      <x>5</x>
-      <y>5</y>
-      <z>5</z>
-      <w>1</w>
+      <x>1</x>
+      <y>0.9</y>
+      <z>0.12</z>
+      <w>0</w>
+    </position>
+  </lightSource>
+
+  <lightSource>
+    <color>
+      <red>0.1</red>
+      <green>0.4</green>
+      <blue>1</blue>
+    </color>
+    <lightIntensity>1</lightIntensity>
+
+    <position>
+      <x>-5</x>
+      <y>-4</y>
+      <z>10</z>
+      <w>0</w>
     </position>
   </lightSource>
   

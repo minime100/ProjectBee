@@ -38,10 +38,10 @@ namespace ProjectBee.Main
         EffectParameter viewParameter;
         EffectParameter worldParameter;
         EffectParameter ambientColorParameter;
-        EffectParameter lightDir;
+        EffectParameter lightColorsParameter;
+        EffectParameter lightPositionsParameter;
 
-        Matrix world, view, projection;
-        Vector3 ambientLightDirVal;
+        Matrix view, projection;
 
         double rotateCamera = 0.0f;
 
@@ -75,9 +75,9 @@ namespace ProjectBee.Main
             worldParameter = shader.Parameters["World"];
             viewParameter = shader.Parameters["View"];
             projectionParameter = shader.Parameters["Projection"];
-
             ambientColorParameter = shader.Parameters["AmbientColor"];
-            lightDir = shader.Parameters["LightDir"];
+            lightColorsParameter = shader.Parameters["LightColors"];
+            lightPositionsParameter = shader.Parameters["LightPositions"];
         }
 
         /// <summary>
@@ -140,10 +140,6 @@ namespace ProjectBee.Main
             if (Keyboard.GetState(PlayerIndex.One).IsKeyDown(Keys.D3))
                 activeLevel.gameObjects.ElementAt<GameObject>(0).ObjectModel = Content.Load<Model>("models/sphere");
 
-
-            // ambient light stuff
-            ambientLightDirVal = new Vector3(1.0f, 0.9f, 0.5f);
-
             // rotate the cam around the center
             rotateCamera += (gameTime.ElapsedGameTime.Milliseconds / 10000.0) * MathHelper.Pi*2;
             float dist = 5.0f;
@@ -159,13 +155,21 @@ namespace ProjectBee.Main
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.AntiqueWhite);
+            GraphicsDevice.Clear(Color.Black);
+
+            List<Vector4> lightColors = new List<Vector4>();
+            List<Vector4> lightPositions = new List<Vector4>();
+
+            foreach (LightSource light in activeLevel.Lights)
+            {
+                lightColors.Add(light.Light);
+                lightPositions.Add(light.PositionInWorld);
+            }
 
             foreach (GameObject gameObject in activeLevel.gameObjects)
             {
                 GameObject toDraw = gameObject;
                 transform.TransformGameObject(ref toDraw);
-                world = toDraw.World;
 
                 ModelMesh mesh = toDraw.ObjectModel.Meshes[0];
                 ModelMeshPart meshPart = mesh.MeshParts[0];
@@ -173,9 +177,10 @@ namespace ProjectBee.Main
                 // Set parameters
                 projectionParameter.SetValue(projection);
                 viewParameter.SetValue(view);
-                worldParameter.SetValue(world);
+                worldParameter.SetValue(toDraw.World);
                 ambientColorParameter.SetValue(activeLevel.AmbientLight);
-                lightDir.SetValue(ambientLightDirVal);
+                lightColorsParameter.SetValue(lightColors.ToArray<Vector4>());
+                lightPositionsParameter.SetValue(lightPositions.ToArray<Vector4>());
 
 
                 //set the vertex source to the mesh's vertex buffer
