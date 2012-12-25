@@ -4,7 +4,6 @@
 	float4x4 View;
 	float4x4 Projection;
 
-	float AmbientIntensity;
 	float4 AmbientColor;
 	float3 LightDir;
 
@@ -44,7 +43,7 @@
 
 	float4 BasicPS(VS_OUTPUT input) : COLOR0
 	{
-		return AmbientIntensity * AmbientColor * input.CosAngIncidence;
+		return float4(AmbientColor.xyz, 1) * AmbientColor.w * input.CosAngIncidence;
 	}
 
 	float4 GaussLighting(VS_OUTPUT input) : COLOR0

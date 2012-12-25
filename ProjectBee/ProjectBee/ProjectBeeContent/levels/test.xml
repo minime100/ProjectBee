@@ -5,7 +5,7 @@
     <green>0.52</green>
     <blue>0.12</blue>
   </ambientLightColor>
-  <ambientLightIntensity>1</ambientLightIntensity>
+  <ambientLightIntensity>0.5</ambientLightIntensity>
   
   <!-- white colored light -->
   <lightSource>
@@ -27,11 +27,27 @@
   <gameObject>
     <model>models/cube</model>
     <position>
-      <x>0</x>
+      <x>-1</x>
       <y>0</y>
       <z>0</z>
     </position>
-    <scaling>1.0</scaling>
+    <scaling>0.5</scaling>
+    <rotationAxis>
+      <x>0</x>
+      <y>0</y>
+      <z>0</z>
+    </rotationAxis>
+    <rotationAngle>0</rotationAngle>
+  </gameObject>
+
+  <gameObject>
+    <model>models/cube</model>
+    <position>
+      <x>1</x>
+      <y>0</y>
+      <z>0</z>
+    </position>
+    <scaling>0.5</scaling>
     <rotationAxis>
       <x>0</x>
       <y>0</y>

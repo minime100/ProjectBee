@@ -37,13 +37,10 @@ namespace ProjectBee.Main
         EffectParameter projectionParameter;
         EffectParameter viewParameter;
         EffectParameter worldParameter;
-        EffectParameter ambientIntensityParameter;
         EffectParameter ambientColorParameter;
         EffectParameter lightDir;
 
         Matrix world, view, projection;
-        float ambientLightIntensity;
-        Vector4 ambientLightColor;
         Vector3 ambientLightDirVal;
 
         double rotateCamera = 0.0f;
@@ -80,7 +77,6 @@ namespace ProjectBee.Main
             projectionParameter = shader.Parameters["Projection"];
 
             ambientColorParameter = shader.Parameters["AmbientColor"];
-            ambientIntensityParameter = shader.Parameters["AmbientIntensity"];
             lightDir = shader.Parameters["LightDir"];
         }
 
@@ -146,8 +142,6 @@ namespace ProjectBee.Main
 
 
             // ambient light stuff
-            ambientLightIntensity = 1.0f;
-            ambientLightColor = Color.DarkGreen.ToVector4();
             ambientLightDirVal = new Vector3(1.0f, 0.9f, 0.5f);
 
             // rotate the cam around the center
@@ -167,44 +161,46 @@ namespace ProjectBee.Main
         {
             GraphicsDevice.Clear(Color.AntiqueWhite);
 
-            GameObject toDraw = activeLevel.gameObjects.ElementAt<GameObject>(0);
-            transform.TransformGameObject(ref toDraw);
-            world = toDraw.World;
-
-            ModelMesh mesh = toDraw.ObjectModel.Meshes[0];
-            ModelMeshPart meshPart = mesh.MeshParts[0];
-
-            // Set parameters
-            projectionParameter.SetValue(projection);
-            viewParameter.SetValue(view);
-            worldParameter.SetValue(world);
-            ambientIntensityParameter.SetValue(ambientLightIntensity);
-            ambientColorParameter.SetValue(ambientLightColor);
-            lightDir.SetValue(ambientLightDirVal);
-
-
-            //set the vertex source to the mesh's vertex buffer
-            graphics.GraphicsDevice.SetVertexBuffer(meshPart.VertexBuffer, meshPart.VertexOffset);
-
-            //set the current index buffer to the sample mesh's index buffer
-            graphics.GraphicsDevice.Indices = meshPart.IndexBuffer;
-
-            shader.CurrentTechnique = shader.Techniques["Technique1"];
-
-            for (int i = 0; i < shader.CurrentTechnique.Passes.Count; i++)
+            foreach (GameObject gameObject in activeLevel.gameObjects)
             {
-                //EffectPass.Apply will update the device to
-                //begin using the state information defined in the current pass
-                shader.CurrentTechnique.Passes[i].Apply();
+                GameObject toDraw = gameObject;
+                transform.TransformGameObject(ref toDraw);
+                world = toDraw.World;
 
-                //theMesh contains all of the information required to draw
-                //the current mesh
-                graphics.GraphicsDevice.DrawIndexedPrimitives(
-                    PrimitiveType.TriangleList, 0, 0,
-                    meshPart.NumVertices, meshPart.StartIndex, meshPart.PrimitiveCount);
+                ModelMesh mesh = toDraw.ObjectModel.Meshes[0];
+                ModelMeshPart meshPart = mesh.MeshParts[0];
+
+                // Set parameters
+                projectionParameter.SetValue(projection);
+                viewParameter.SetValue(view);
+                worldParameter.SetValue(world);
+                ambientColorParameter.SetValue(activeLevel.AmbientLight);
+                lightDir.SetValue(ambientLightDirVal);
+
+
+                //set the vertex source to the mesh's vertex buffer
+                graphics.GraphicsDevice.SetVertexBuffer(meshPart.VertexBuffer, meshPart.VertexOffset);
+
+                //set the current index buffer to the sample mesh's index buffer
+                graphics.GraphicsDevice.Indices = meshPart.IndexBuffer;
+
+                shader.CurrentTechnique = shader.Techniques["Technique1"];
+
+                for (int i = 0; i < shader.CurrentTechnique.Passes.Count; i++)
+                {
+                    //EffectPass.Apply will update the device to
+                    //begin using the state information defined in the current pass
+                    shader.CurrentTechnique.Passes[i].Apply();
+
+                    //theMesh contains all of the information required to draw
+                    //the current mesh
+                    graphics.GraphicsDevice.DrawIndexedPrimitives(
+                        PrimitiveType.TriangleList, 0, 0,
+                        meshPart.NumVertices, meshPart.StartIndex, meshPart.PrimitiveCount);
+                }
+
+                base.Draw(gameTime);
             }
-
-            base.Draw(gameTime);
         }
     }
 }
