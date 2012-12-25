@@ -32,9 +32,14 @@ namespace ProjectBee.Transformations
         {
             Vector3 axis = toBeRotated.RotationAxis;
             float angle = MathHelper.ToRadians(toBeRotated.RotationAngleInDegrees);
-            Quaternion rotationQuaternion = Quaternion.CreateFromAxisAngle(axis, angle);
+            float angleHalf = angle / 2;
+            float sinAngleHalf = (float)Math.Sin(angleHalf);
+            Quaternion rotationQuaternion = new Quaternion(axis.X * sinAngleHalf, axis.Y * sinAngleHalf, axis.Z * sinAngleHalf, (float)Math.Cos(angleHalf));
+            rotationQuaternion.Normalize();
 
-            toBeRotated.World *= Matrix.CreateFromQuaternion(rotationQuaternion);
+            Matrix rotationMatrix = Matrix.CreateFromQuaternion(rotationQuaternion);
+
+            toBeRotated.World *= rotationMatrix;
         }
 
         public void TransformGameObject(ref GameObject toTransform)

@@ -89,8 +89,8 @@ namespace ProjectBee.Main
 
             drawnObject = CreateCube();
             drawnObject.PositionInWorld = new Vector3(0, 0, 0);
-            drawnObject.RotationAxis = new Vector3(1, 1, 1);
-            drawnObject.RotationAngleInDegrees = 90;
+            drawnObject.RotationAxis = new Vector3(-1, -1, -1);
+            drawnObject.RotationAngleInDegrees = 45.0f;
             drawnObject.ScalingInWorld = 1.0f;
 
             shader = Content.Load<Effect>("Shader");
@@ -98,7 +98,7 @@ namespace ProjectBee.Main
             SetupShaderParameters();
 
             state = new RasterizerState();
-            state.CullMode = CullMode.CullClockwiseFace;
+            state.CullMode = CullMode.None;
             state.FillMode = FillMode.Solid;
 
             GraphicsDevice.RasterizerState = state;
