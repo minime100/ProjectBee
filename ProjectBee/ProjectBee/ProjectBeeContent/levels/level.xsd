@@ -15,7 +15,9 @@
     <xsd:sequence>
       <xsd:element name="color" type="colorNoAlpha"/>
       <xsd:element name="lightIntensity" type="betweenZeroAndOne" />
-      <xsd:element name="position" type="vec3" />
+      <!-- the w coordinate of position is used whether it is a directional light or not
+        if the w coordinate is smaller 1 it is directional-->
+      <xsd:element name="position" type="vec4" />
     </xsd:sequence>
   </xsd:complexType>
   
@@ -49,6 +51,15 @@
       <xsd:element name="x" type="xsd:float" />
       <xsd:element name="y" type="xsd:float" />
       <xsd:element name="z" type="xsd:float" />
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="vec4">
+    <xsd:sequence>
+      <xsd:element name="x" type="xsd:float" />
+      <xsd:element name="y" type="xsd:float" />
+      <xsd:element name="z" type="xsd:float" />
+      <xsd:element name="w" type="xsd:float" />
     </xsd:sequence>
   </xsd:complexType>
 </xsd:schema>

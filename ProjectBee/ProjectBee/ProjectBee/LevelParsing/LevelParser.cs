@@ -35,20 +35,20 @@ namespace ProjectBee.LevelParsing
                 toParse.ambientLightColor.blue, toParse.ambientLightIntensity);
 
             parsed.Lights = new List<LightSource>();
-            foreach (lightSourceType lightSource in toParse.lightSource)
+            foreach (XmlLightSource lightSource in toParse.lightSources)
             {
                 LightSource parsedLightSource = new LightSource();
 
                 parsedLightSource.Light = new Vector4(lightSource.color.red, lightSource.color.green,
                     lightSource.color.blue, lightSource.lightIntensity);
-                parsedLightSource.PositionInWorld = new Vector3(lightSource.position.x,
-                    lightSource.position.y, lightSource.position.z);
+                parsedLightSource.PositionInWorld = new Vector4(lightSource.position.x,
+                    lightSource.position.y, lightSource.position.z, lightSource.position.w);
 
                 parsed.Lights.Add(parsedLightSource);
             }
 
             parsed.gameObjects = new List<GameObject>();
-            foreach (gameObjectType gameObject in toParse.gameObject)
+            foreach (XmlGameObject gameObject in toParse.gameObjects)
             {
                 GameObject parsedObject = new GameObject();
 

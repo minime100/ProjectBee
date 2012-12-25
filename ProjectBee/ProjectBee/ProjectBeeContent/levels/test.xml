@@ -20,6 +20,7 @@
       <x>5</x>
       <y>5</y>
       <z>5</z>
+      <w>1</w>
     </position>
   </lightSource>
   

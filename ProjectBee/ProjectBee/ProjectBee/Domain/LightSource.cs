@@ -13,6 +13,6 @@ namespace ProjectBee.Domain
         /// alpha value is used to determine intensity of the light
         /// </summary>
         public Vector4 Light { get; set; }
-        public Vector3 PositionInWorld { get; set; }
+        public Vector4 PositionInWorld { get; set; }
     }
 }

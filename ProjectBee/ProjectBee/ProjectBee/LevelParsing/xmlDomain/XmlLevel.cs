@@ -24,17 +24,17 @@ using System.Xml.Serialization;
 [System.Xml.Serialization.XmlRootAttribute("level", Namespace="", IsNullable=false)]
 public partial class XmlLevel {
     
-    private colorNoAlpha ambientLightColorField;
+    private ColorNoAlpha ambientLightColorField;
     
     private float ambientLightIntensityField;
     
-    private lightSourceType[] lightSourceField;
+    private XmlLightSource[] lightSourceField;
     
-    private gameObjectType[] gameObjectField;
+    private XmlGameObject[] gameObjectField;
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public colorNoAlpha ambientLightColor {
+    public ColorNoAlpha ambientLightColor {
         get {
             return this.ambientLightColorField;
         }
@@ -56,7 +56,7 @@ public partial class XmlLevel {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("lightSource", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public lightSourceType[] lightSource {
+    public XmlLightSource[] lightSources {
         get {
             return this.lightSourceField;
         }
@@ -67,7 +67,7 @@ public partial class XmlLevel {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute("gameObject", Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public gameObjectType[] gameObject {
+    public XmlGameObject[] gameObjects {
         get {
             return this.gameObjectField;
         }
@@ -82,7 +82,8 @@ public partial class XmlLevel {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class colorNoAlpha {
+[System.Xml.Serialization.XmlType("colorNoAlpha")]
+public partial class ColorNoAlpha {
     
     private float redField;
     
@@ -129,15 +130,16 @@ public partial class colorNoAlpha {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class gameObjectType {
+[System.Xml.Serialization.XmlType("gameObjectType")]
+public partial class XmlGameObject {
     
     private string modelField;
     
-    private vec3 positionField;
+    private XmlVec3 positionField;
     
     private float scalingField;
     
-    private vec3 rotationAxisField;
+    private XmlVec3 rotationAxisField;
     
     private float rotationAngleField;
     
@@ -154,7 +156,7 @@ public partial class gameObjectType {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public vec3 position {
+    public XmlVec3 position {
         get {
             return this.positionField;
         }
@@ -176,7 +178,7 @@ public partial class gameObjectType {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public vec3 rotationAxis {
+    public XmlVec3 rotationAxis {
         get {
             return this.rotationAxisField;
         }
@@ -202,7 +204,8 @@ public partial class gameObjectType {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class vec3 {
+[System.Xml.Serialization.XmlType("vec3")]
+public partial class XmlVec3 {
     
     private float xField;
     
@@ -249,17 +252,92 @@ public partial class vec3 {
 [System.SerializableAttribute()]
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.ComponentModel.DesignerCategoryAttribute("code")]
-public partial class lightSourceType {
+[System.Xml.Serialization.XmlType("vec4")]
+public partial class XmlVec4
+{
+
+    private float xField;
+
+    private float yField;
+
+    private float zField;
+
+    private float wField;
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+    public float x
+    {
+        get
+        {
+            return this.xField;
+        }
+        set
+        {
+            this.xField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+    public float y
+    {
+        get
+        {
+            return this.yField;
+        }
+        set
+        {
+            this.yField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+    public float z
+    {
+        get
+        {
+            return this.zField;
+        }
+        set
+        {
+            this.zField = value;
+        }
+    }
+
+    /// <remarks/>
+    [System.Xml.Serialization.XmlElementAttribute(Form = System.Xml.Schema.XmlSchemaForm.Unqualified)]
+    public float w
+    {
+        get
+        {
+            return this.wField;
+        }
+        set
+        {
+            this.wField = value;
+        }
+    }
+}
+
+/// <remarks/>
+[System.CodeDom.Compiler.GeneratedCodeAttribute("xsd", "4.0.30319.1")]
+[System.SerializableAttribute()]
+[System.Diagnostics.DebuggerStepThroughAttribute()]
+[System.ComponentModel.DesignerCategoryAttribute("code")]
+[System.Xml.Serialization.XmlType("lightSourceType")]
+public partial class XmlLightSource {
     
-    private colorNoAlpha colorField;
+    private ColorNoAlpha colorField;
     
     private float lightIntensityField;
     
-    private vec3 positionField;
+    private XmlVec4 positionField;
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public colorNoAlpha color {
+    public ColorNoAlpha color {
         get {
             return this.colorField;
         }
@@ -281,7 +359,7 @@ public partial class lightSourceType {
     
     /// <remarks/>
     [System.Xml.Serialization.XmlElementAttribute(Form=System.Xml.Schema.XmlSchemaForm.Unqualified)]
-    public vec3 position {
+    public XmlVec4 position {
         get {
             return this.positionField;
         }
